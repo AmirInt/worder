@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="data">
+      <UniqueIdentifier>{20b752f8-3a8b-45bd-a129-9b5e0dd12b6d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="C:\Users\amirint\Downloads\large.txt">
+      <Filter>data</Filter>
+    </Text>
+    <Text Include="C:\Users\amirint\Downloads\medium.txt">
+      <Filter>data</Filter>
+    </Text>
+    <Text Include="C:\Users\amirint\Downloads\small.txt">
+      <Filter>data</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="some.cpp" />
+  </ItemGroup>
+</Project>
