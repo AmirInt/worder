@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="kernel_calls.cu" />
+    <CudaCompile Include="main.cu" />
+    <CudaCompile Include="kernels.cu" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="data">
@@ -9,17 +11,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="C:\Users\amirint\Downloads\large.txt">
+    <Text Include="data\google-10000-english-no-swears.txt">
       <Filter>data</Filter>
     </Text>
-    <Text Include="C:\Users\amirint\Downloads\medium.txt">
+    <Text Include="data\large.txt">
       <Filter>data</Filter>
     </Text>
-    <Text Include="C:\Users\amirint\Downloads\small.txt">
+    <Text Include="data\medium.txt">
+      <Filter>data</Filter>
+    </Text>
+    <Text Include="data\small.txt">
       <Filter>data</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="some.cpp" />
+    <ClInclude Include="kernels.cuh" />
+    <ClInclude Include="kernel_calls.cuh" />
+    <ClInclude Include="general.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="general.cpp" />
   </ItemGroup>
 </Project>

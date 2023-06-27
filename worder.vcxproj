@@ -88,8 +88,12 @@
     <Text Include="data\small.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="general.hpp" />
     <ClInclude Include="kernel_calls.cuh" />
     <ClInclude Include="kernels.cuh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="general.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,16 @@
+// Windows
 #include <windows.h>
+
+// C++
 #include <iostream>
+
+// CUDA
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+
+// Package
+#include "kernel_calls.cuh"
+
 
 cudaError_t addWithCuda(int* c, const int* a, const int* b, unsigned int size);
 
