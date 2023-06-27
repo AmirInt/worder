@@ -80,9 +80,9 @@
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="x64\Debug\data\large.txt" />
-    <Text Include="x64\Debug\data\medium.txt" />
-    <Text Include="x64\Debug\data\small.txt" />
+    <Text Include="data\large.txt" />
+    <Text Include="data\medium.txt" />
+    <Text Include="data\small.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
