@@ -77,13 +77,19 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="kernel_calls.cu" />
+    <CudaCompile Include="main.cu" />
+    <CudaCompile Include="kernels.cu" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\google-10000-english-no-swears.txt" />
     <Text Include="data\large.txt" />
     <Text Include="data\medium.txt" />
     <Text Include="data\small.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kernel_calls.cuh" />
+    <ClInclude Include="kernels.cuh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
