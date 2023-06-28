@@ -13,7 +13,13 @@
 
 namespace kernel_calls
 {
-	cudaError_t addWithCuda(int* c, const int* a, const int* b, unsigned int size);
+	void processDataWithCuda(
+		const char* data
+		, const size_t data_length
+		, const char* keywords
+		, const size_t keywords_length
+		, const size_t word_size
+		, int* histogram);
 }
 
 #endif // WORDER_KERNEL_CALLS_CUH_

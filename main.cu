@@ -37,22 +37,25 @@ int main()
 
     general::readWordFile(small_data_file, data, small_data_length, word_size);
 
+    // Histogram
+    int* histogram{ new int[keywords_length] };
+
     cudaError_t cudaStatus;
 
-    // Add vectors in parallel.
-    //cudaError_t cudaStatus = kernel_calls::addWithCuda(c, a, b, arraySize);
-    //if (cudaStatus != cudaSuccess) {
-    //    fprintf(stderr, "addWithCuda failed!");
-    //    return 1;
-    //}
-
+    // Process data in parallel.
+    kernel_calls::processDataWithCuda(
+        data
+        , small_data_length
+        , keywords
+        , keywords_length
+        , word_size
+        , histogram);
+    
     // cudaDeviceReset must be called before exiting in order for profiling and
     // tracing tools such as Nsight and Visual Profiler to show complete traces.
     cudaStatus = cudaDeviceReset();
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaDeviceReset failed!");
-        return 1;
-    }
+    if (cudaStatus != cudaSuccess)
+        throw std::runtime_error("cudaDeviceReset failed!");
 
     return 0;
 }
