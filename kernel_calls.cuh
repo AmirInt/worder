@@ -1,5 +1,5 @@
 #ifndef WORDER_KERNEL_CALLS_CUH_
-#define WORDER_KERNEL_CALLSS_CUH_
+#define WORDER_KERNEL_CALLS_CUH_
 
 // C++
 #include <iostream>
@@ -16,4 +16,4 @@ namespace kernel_calls
 	cudaError_t addWithCuda(int* c, const int* a, const int* b, unsigned int size);
 }
 
-#endif // WORDER_KERNEL_CALLSS_CUH_
+#endif // WORDER_KERNEL_CALLS_CUH_

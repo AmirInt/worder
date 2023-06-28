@@ -10,24 +10,41 @@
 
 // Package
 #include "kernel_calls.cuh"
+#include "general.hpp"
 
 
 int main()
 {
-    const int arraySize = 5;
-    const int a[arraySize] = { 1, 2, 3, 4, 5 };
-    const int b[arraySize] = { 10, 20, 30, 40, 50 };
-    int c[arraySize] = { 0 };
+    constexpr size_t word_size{ 32 }; // bytes
+    // Reading keywords
+    constexpr size_t keywords_length{ 1'024 }; // words
+    std::string keyword_file{ "./data/google-10000-english-no-swears.txt" };
+    char* keywords{ new char[keywords_length * word_size] };
+
+    general::readWordFile(keyword_file, keywords, keywords_length, word_size);
+
+    // Reading data
+    constexpr size_t small_data_length{ 131'072 }; // words
+    std::string small_data_file{ "./data/small.txt" };
+    
+    constexpr size_t medium_data_length{ 393'216 }; // words
+    std::string medium_data_file{ "./data/small.txt" };
+    
+    constexpr size_t large_data_length{ 786'432 }; // words
+    std::string large_data_file{ "./data/small.txt" };
+    
+    char* data{ new char[small_data_length * word_size] };
+
+    general::readWordFile(small_data_file, data, small_data_length, word_size);
+
+    cudaError_t cudaStatus;
 
     // Add vectors in parallel.
-    cudaError_t cudaStatus = kernel_calls::addWithCuda(c, a, b, arraySize);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "addWithCuda failed!");
-        return 1;
-    }
-
-    printf("{1,2,3,4,5} + {10,20,30,40,50} = {%d,%d,%d,%d,%d}\n",
-        c[0], c[1], c[2], c[3], c[4]);
+    //cudaError_t cudaStatus = kernel_calls::addWithCuda(c, a, b, arraySize);
+    //if (cudaStatus != cudaSuccess) {
+    //    fprintf(stderr, "addWithCuda failed!");
+    //    return 1;
+    //}
 
     // cudaDeviceReset must be called before exiting in order for profiling and
     // tracing tools such as Nsight and Visual Profiler to show complete traces.
