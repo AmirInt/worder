@@ -49,7 +49,7 @@ namespace kernel_calls
                 throw std::runtime_error("cudaMemcpy failed!");
 
             // Launch a kernel on the GPU with one thread for each element.
-            kernels::addKernel << <1, size >> > (dev_c, dev_a, dev_b);
+            //kernels::countWords << <1, size >> > (dev_data, data_length, dev_keywords, keywords_length, )
 
             // Check for any errors launching the kernel
             cudaStatus = cudaGetLastError();

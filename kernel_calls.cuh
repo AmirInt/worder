@@ -3,6 +3,7 @@
 
 // C++
 #include <iostream>
+#include <string>
 
 // CUDA
 #include "cuda_runtime.h"

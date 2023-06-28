@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\google-10000-english-no-swears.txt" />
+    <Text Include="data\huge.txt" />
     <Text Include="data\large.txt" />
     <Text Include="data\medium.txt" />
     <Text Include="data\small.txt" />

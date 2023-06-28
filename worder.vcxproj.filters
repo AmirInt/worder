@@ -23,6 +23,9 @@
     <Text Include="data\small.txt">
       <Filter>data</Filter>
     </Text>
+    <Text Include="data\huge.txt">
+      <Filter>data</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kernels.cuh" />

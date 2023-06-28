@@ -3,6 +3,7 @@
 
 // C++
 #include <iostream>
+#include <chrono>
 
 // CUDA
 #include "cuda_runtime.h"
@@ -28,34 +29,47 @@ int main()
     std::string small_data_file{ "./data/small.txt" };
     
     constexpr size_t medium_data_length{ 393'216 }; // words
-    std::string medium_data_file{ "./data/small.txt" };
+    std::string medium_data_file{ "./data/medium.txt" };
     
     constexpr size_t large_data_length{ 786'432 }; // words
-    std::string large_data_file{ "./data/small.txt" };
-    
-    char* data{ new char[small_data_length * word_size] };
+    std::string large_data_file{ "./data/large.txt" };
 
-    general::readWordFile(small_data_file, data, small_data_length, word_size);
+    constexpr size_t huge_data_length{ 1'572'864 }; // words
+    std::string huge_data_file{ "./data/huge.txt" };
+
+    std::string data_file{ huge_data_file };
+    constexpr size_t data_length{ huge_data_length };
+    char* data{ new char[data_length * word_size] };
+
+    general::readWordFile(data_file, data, data_length, word_size);
 
     // Histogram
-    int* histogram{ new int[keywords_length] };
+    int* histogram{ new int[keywords_length]() };
 
-    cudaError_t cudaStatus;
+    auto millis{ general::processData(data, data_length, keywords, keywords_length, word_size, histogram) };
 
-    // Process data in parallel.
-    kernel_calls::processDataWithCuda(
-        data
-        , small_data_length
-        , keywords
-        , keywords_length
-        , word_size
-        , histogram);
-    
-    // cudaDeviceReset must be called before exiting in order for profiling and
-    // tracing tools such as Nsight and Visual Profiler to show complete traces.
-    cudaStatus = cudaDeviceReset();
-    if (cudaStatus != cudaSuccess)
-        throw std::runtime_error("cudaDeviceReset failed!");
+    //for (int i{}; i < keywords_length; ++i) {
+    //    std::cout << &keywords[i * word_size] << ": " << histogram[i] << '\n';
+    //}
+
+    std::cout << "Duration: " << millis.count() << '\n';
+
+    //cudaError_t cudaStatus;
+
+    //// Process data in parallel.
+    //kernel_calls::processDataWithCuda(
+    //    data
+    //    , small_data_length
+    //    , keywords
+    //    , keywords_length
+    //    , word_size
+    //    , histogram);
+    //
+    //// cudaDeviceReset must be called before exiting in order for profiling and
+    //// tracing tools such as Nsight and Visual Profiler to show complete traces.
+    //cudaStatus = cudaDeviceReset();
+    //if (cudaStatus != cudaSuccess)
+    //    throw std::runtime_error("cudaDeviceReset failed!");
 
     return 0;
 }

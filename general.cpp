@@ -14,4 +14,31 @@ namespace general
 			}
 		}
 	}
+
+	std::chrono::milliseconds processData(const char* data
+		, const size_t data_length
+		, const char* keywords
+		, const size_t keywords_length
+		, const size_t word_size
+		, int* histogram)
+	{
+		auto start{ std::chrono::system_clock::now() };
+
+		for (int i{}; i < data_length; ++i) {
+			static int j;
+			j = 0;
+			for (; j < keywords_length; ++j) {
+				if (strcmp(&data[i * word_size], &keywords[j * word_size]) == 0) {
+					++histogram[j];
+					break;
+				}
+			}
+		}
+		
+		auto end{ std::chrono::system_clock::now() };
+		
+		auto millis{ std::chrono::duration_cast<std::chrono::milliseconds>(end - start) };
+		
+		return millis;
+	}
 }
