@@ -9,8 +9,8 @@ namespace kernel_calls
         , const char* keywords
         , int* histogram)
     {
-        int* dev_data{};
-        int* dev_keywords{};
+        char* dev_data{};
+        char* dev_keywords{};
         int* dev_histogram{};
         cudaError_t cudaStatus;
 
@@ -47,7 +47,7 @@ namespace kernel_calls
                 throw std::runtime_error("cudaMemcpy failed!");
 
             // Launch a kernel on the GPU with one thread for each element.
-            kernels::countWords << <1, size >> > (dev_data, data_length, dev_keywords, dev_histogram);
+            kernels::countWords << <1, 1 >> > (dev_data, data_length, dev_keywords, dev_histogram);
 
             // Check for any errors launching the kernel
             cudaStatus = cudaGetLastError();
