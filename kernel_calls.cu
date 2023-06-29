@@ -7,8 +7,6 @@ namespace kernel_calls
         const char* data
         , const size_t data_length
         , const char* keywords
-        , const size_t keywords_length
-        , const size_t word_size
         , int* histogram)
     {
         int* dev_data{};
@@ -23,33 +21,33 @@ namespace kernel_calls
                 throw std::runtime_error("cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
 
             // Allocate GPU buffers for three vectors (two input, one output)    .
-            cudaStatus = cudaMalloc((void**)&dev_data, data_length * word_size * sizeof(char));
+            cudaStatus = cudaMalloc((void**)&dev_data, data_length * general::word_size * sizeof(char));
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMalloc failed!");
 
-            cudaStatus = cudaMalloc((void**)&dev_keywords, keywords_length * word_size * sizeof(char));
+            cudaStatus = cudaMalloc((void**)&dev_keywords, general::keywords_length * general::word_size * sizeof(char));
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMalloc failed!");
 
-            cudaStatus = cudaMalloc((void**)&dev_histogram, keywords_length * sizeof(int));
+            cudaStatus = cudaMalloc((void**)&dev_histogram, general::keywords_length * sizeof(int));
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMalloc failed!");
 
             // Copy input vectors from host memory to GPU buffers.
-            cudaStatus = cudaMemcpy(dev_data, data, data_length * word_size * sizeof(char), cudaMemcpyHostToDevice);
+            cudaStatus = cudaMemcpy(dev_data, data, data_length * general::word_size * sizeof(char), cudaMemcpyHostToDevice);
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMemcpy failed!");
 
-            cudaStatus = cudaMemcpy(dev_keywords, keywords, keywords_length * word_size * sizeof(char), cudaMemcpyHostToDevice);
+            cudaStatus = cudaMemcpy(dev_keywords, keywords, general::keywords_length * general::word_size * sizeof(char), cudaMemcpyHostToDevice);
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMemcpy failed!");
 
-            cudaStatus = cudaMemcpy(dev_histogram, histogram, keywords_length * sizeof(int), cudaMemcpyHostToDevice);
+            cudaStatus = cudaMemcpy(dev_histogram, histogram, general::keywords_length * sizeof(int), cudaMemcpyHostToDevice);
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMemcpy failed!");
 
             // Launch a kernel on the GPU with one thread for each element.
-            //kernels::countWords << <1, size >> > (dev_data, data_length, dev_keywords, keywords_length, )
+            kernels::countWords << <1, size >> > (dev_data, data_length, dev_keywords, dev_histogram);
 
             // Check for any errors launching the kernel
             cudaStatus = cudaGetLastError();
@@ -63,7 +61,7 @@ namespace kernel_calls
                 throw std::runtime_error("cudaDeviceSynchronize returned error code " + std::to_string(cudaStatus) + "after launching addKernel!");
 
             // Copy output vector from GPU buffer to host memory.
-            cudaStatus = cudaMemcpy(histogram, dev_histogram, keywords_length * sizeof(int), cudaMemcpyDeviceToHost);
+            cudaStatus = cudaMemcpy(histogram, dev_histogram, general::keywords_length * sizeof(int), cudaMemcpyDeviceToHost);
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMemcpy failed!");
         }

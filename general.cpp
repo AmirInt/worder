@@ -2,11 +2,19 @@
 
 namespace general
 {
-	void readWordFile(const std::string& file_path, char* word_array, size_t num, size_t word_size)
+	void readWordFile(
+		const std::string& file_path
+		, char* word_array
+		, size_t num
+		, size_t offset
+		, size_t word_size)
 	{
 		std::string input_word;
 		std::ifstream word_file(file_path);
 		if (word_file.is_open()) {
+			for (int i{}; i < offset; ++i)
+				word_file >> input_word;
+
 			for (int i{}; i < num && word_file; ++i) {
 				word_file >> input_word;
 				if (input_word.length() < word_size)
@@ -18,8 +26,6 @@ namespace general
 	std::chrono::milliseconds processData(const char* data
 		, const size_t data_length
 		, const char* keywords
-		, const size_t keywords_length
-		, const size_t word_size
 		, int* histogram)
 	{
 		auto start{ std::chrono::system_clock::now() };

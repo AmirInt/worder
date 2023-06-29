@@ -16,43 +16,38 @@
 
 int main()
 {
-    constexpr size_t word_size{ 32 }; // bytes
-    // Reading keywords
-    constexpr size_t keywords_length{ 1'024 }; // words
     std::string keyword_file{ "./data/google-10000-english-no-swears.txt" };
-    char* keywords{ new char[keywords_length * word_size] };
+    char* keywords{ new char[general::keywords_length * general::word_size] };
 
-    general::readWordFile(keyword_file, keywords, keywords_length, word_size);
+    general::readWordFile(
+        keyword_file
+        , keywords
+        , general::keywords_length
+        , general::keyword_offset
+        , general::word_size);
 
     // Reading data
-    constexpr size_t small_data_length{ 131'072 }; // words
-    std::string small_data_file{ "./data/small.txt" };
-    
-    constexpr size_t medium_data_length{ 393'216 }; // words
-    std::string medium_data_file{ "./data/medium.txt" };
-    
-    constexpr size_t large_data_length{ 786'432 }; // words
-    std::string large_data_file{ "./data/large.txt" };
+    std::string data_file{ general::small_data_file };
+    constexpr size_t data_length{ general::small_data_length };
+    char* data{ new char[data_length * general::word_size] };
 
-    constexpr size_t huge_data_length{ 1'572'864 }; // words
-    std::string huge_data_file{ "./data/huge.txt" };
-
-    std::string data_file{ huge_data_file };
-    constexpr size_t data_length{ huge_data_length };
-    char* data{ new char[data_length * word_size] };
-
-    general::readWordFile(data_file, data, data_length, word_size);
+    general::readWordFile(
+        data_file
+        , data
+        , data_length
+        , general::no_offset
+        , general::word_size);
 
     // Histogram
-    int* histogram{ new int[keywords_length]() };
+    int* histogram{ new int[general::keywords_length]() };
 
-    auto millis{ general::processData(data, data_length, keywords, keywords_length, word_size, histogram) };
+    auto millis{ general::processData(data, data_length, keywords, histogram) };
 
-    //for (int i{}; i < keywords_length; ++i) {
-    //    std::cout << &keywords[i * word_size] << ": " << histogram[i] << '\n';
-    //}
+    for (int i{}; i < general::keywords_length; ++i) {
+        std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
+    }
 
-    std::cout << "Duration: " << millis.count() << '\n';
+    std::cout << "\n\nDuration: " << millis.count() << '\n';
 
     //cudaError_t cudaStatus;
 

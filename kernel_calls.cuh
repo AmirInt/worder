@@ -10,6 +10,7 @@
 #include "device_launch_parameters.h"
 
 // Package
+#include "general.hpp"
 #include "kernels.cuh"
 
 namespace kernel_calls
@@ -18,8 +19,6 @@ namespace kernel_calls
 		const char* data
 		, const size_t data_length
 		, const char* keywords
-		, const size_t keywords_length
-		, const size_t word_size
 		, int* histogram);
 }
 

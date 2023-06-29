@@ -33,13 +33,36 @@
 
 namespace general
 {
-	void readWordFile(const std::string& file_path, char* word_array, size_t num, size_t word_size);
+	constexpr size_t word_size{ 32 };
+
+	constexpr size_t no_offset{ 0 };
+	constexpr size_t keyword_offset{ 512 };
+	constexpr size_t keywords_length{ 512 };
+
+	constexpr size_t small_data_length{ 131'072 }; // words
+	const std::string small_data_file{ "./data/small.txt" };
+
+	constexpr size_t medium_data_length{ 393'216 }; // words
+	const std::string medium_data_file{ "./data/medium.txt" };
+
+	constexpr size_t large_data_length{ 786'432 }; // words
+	const std::string large_data_file{ "./data/large.txt" };
+
+	constexpr size_t huge_data_length{ 1'572'864 }; // words
+	const std::string huge_data_file{ "./data/huge.txt" };
+
+	
+	void readWordFile(
+		const std::string& file_path
+		, char* word_array
+		, size_t num
+		, size_t offset
+		, size_t word_size);
+
 
 	std::chrono::milliseconds processData(const char* data
 		, const size_t data_length
 		, const char* keywords
-		, const size_t keywords_length
-		, const size_t word_size
 		, int* histogram);
 }
 
