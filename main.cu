@@ -27,8 +27,8 @@ int main()
         , general::word_size);
 
     // Reading data
-    std::string data_file{ general::huge_data_file };
-    constexpr size_t data_length{ general::huge_data_length };
+    std::string data_file{ general::small_data_file };
+    constexpr size_t data_length{ general::small_data_length };
     char* data{ new char[data_length * general::word_size] };
 
     general::readWordFile(
@@ -41,42 +41,44 @@ int main()
     // Histogram
     int* histogram{ new int[general::keywords_length]() };
 
-    //// Run on CPU
-    //auto millis{ general::processData(data, data_length, keywords, histogram) };
-    //std::cout << "Duration(ms): " << millis.count() << '\n';
+    // Run on CPU
+    auto premillis{ general::preprocessData(data, data_length) };
 
-    // Run on GPU
-    cudaError_t cudaStatus;
+    auto millis{ general::processData(data, data_length, keywords, histogram) };
+    std::cout << "Duration(ms):\nPreprocess: " << premillis.count() << "\nProcess: " << millis.count() << '\n';
 
-    // Process data in parallel.
-    try {
-        float compute_time{};
-        float total_time{};
+    //// Run on GPU
+    //cudaError_t cudaStatus;
 
-        kernel_calls::processDataWithCuda(
-            data
-            , data_length
-            , keywords
-            , histogram
-            , &compute_time
-            , &total_time);
+    //// Process data in parallel.
+    //try {
+    //    float compute_time{};
+    //    float total_time{};
 
-        std::cout << "Duration(ms):\nCompute Time: " << compute_time << "\nTotal Time: " << total_time << '\n';
-    }
-    catch (std::runtime_error& e) {
-        std::cout << e.what() << '\n';
-    }
-    
-    // cudaDeviceReset must be called before exiting in order for profiling and
-    // tracing tools such as Nsight and Visual Profiler to show complete traces.
-    cudaStatus = cudaDeviceReset();
-    if (cudaStatus != cudaSuccess)
-        throw std::runtime_error("cudaDeviceReset failed!");
+    //    kernel_calls::processDataWithCuda(
+    //        data
+    //        , data_length
+    //        , keywords
+    //        , histogram
+    //        , &compute_time
+    //        , &total_time);
 
-    //// Print the histogram
-    //for (int i{}; i < general::keywords_length; ++i) {
-    //    std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
+    //    std::cout << "Duration(ms):\nCompute Time: " << compute_time << "\nTotal Time: " << total_time << '\n';
     //}
+    //catch (std::runtime_error& e) {
+    //    std::cout << e.what() << '\n';
+    //}
+    //
+    //// cudaDeviceReset must be called before exiting in order for profiling and
+    //// tracing tools such as Nsight and Visual Profiler to show complete traces.
+    //cudaStatus = cudaDeviceReset();
+    //if (cudaStatus != cudaSuccess)
+    //    throw std::runtime_error("cudaDeviceReset failed!");
+
+    // Print the histogram
+    for (int i{}; i < general::keywords_length; ++i) {
+        std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
+    }
 
 
     return 0;

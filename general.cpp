@@ -23,7 +23,36 @@ namespace general
 		}
 	}
 
-	std::chrono::milliseconds processData(const char* data
+	std::chrono::milliseconds preprocessData(
+		char* data, const size_t data_length)
+	{
+		std::regex word_regex("(\\w+)");
+		std::smatch match;
+
+		auto start{ std::chrono::system_clock::now() };
+
+		for (int i{ 0 }; i < data_length; ++i) {
+			static std::string str;
+			str = &data[i * word_size];
+			std::regex_search(str, match, word_regex);
+
+			str = match[0].str();
+
+			std::transform(str.begin(), str.end(), str.begin()
+				, [](unsigned char c) { return std::tolower(c); });
+
+			strcpy(&data[i * word_size], str.c_str());
+		}
+
+		auto end{ std::chrono::system_clock::now() };
+
+		auto millis{ std::chrono::duration_cast<std::chrono::milliseconds>(end - start) };
+
+		return millis;
+	}
+
+	std::chrono::milliseconds processData(
+		const char* data
 		, const size_t data_length
 		, const char* keywords
 		, int* histogram)

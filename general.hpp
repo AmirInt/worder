@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
+#include <regex>
 
 //There is 1 device supporting CUDA
 //
@@ -60,7 +61,11 @@ namespace general
 		, size_t word_size);
 
 
-	std::chrono::milliseconds processData(const char* data
+	std::chrono::milliseconds preprocessData(char* data, const size_t data_length);
+
+
+	std::chrono::milliseconds processData(
+		const char* data
 		, const size_t data_length
 		, const char* keywords
 		, int* histogram);
