@@ -22,6 +22,16 @@ namespace kernel_calls
 		, int* histogram
 		, float* compute_time
 		, float* total_time);
+
+
+	void processDataWithCudaPreprocess(
+		const char* data
+		, const size_t data_length
+		, const char* keywords
+		, int* histogram
+		, float* compute_time
+		, float* total_time);
+
 }
 
 #endif // WORDER_KERNEL_CALLS_CUH_
