@@ -30,7 +30,7 @@ namespace general
 	{
 		auto start{ std::chrono::system_clock::now() };
 
-		for (int i{}; i < data_length; ++i) {
+		for (int i{ 0 }; i < data_length; ++i) {
 			static int j;
 			j = 0;
 			for (; j < keywords_length; ++j) {

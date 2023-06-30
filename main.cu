@@ -27,8 +27,8 @@ int main()
         , general::word_size);
 
     // Reading data
-    std::string data_file{ general::small_data_file };
-    constexpr size_t data_length{ general::small_data_length };
+    std::string data_file{ general::huge_data_file };
+    constexpr size_t data_length{ general::huge_data_length };
     char* data{ new char[data_length * general::word_size] };
 
     general::readWordFile(
@@ -41,30 +41,35 @@ int main()
     // Histogram
     int* histogram{ new int[general::keywords_length]() };
 
-    auto millis{ general::processData(data, data_length, keywords, histogram) };
+    // Run on CPU
+    //auto millis{ general::processData(data, data_length, keywords, histogram) };
+
+    // Run on GPU
+    cudaError_t cudaStatus;
+
+    // Process data in parallel.
+    try {
+        kernel_calls::processDataWithCuda(
+            data
+            , data_length
+            , keywords
+            , histogram);
+    }
+    catch (std::runtime_error& e) {
+        std::cout << e.what() << '\n';
+    }
+    
+    // cudaDeviceReset must be called before exiting in order for profiling and
+    // tracing tools such as Nsight and Visual Profiler to show complete traces.
+    cudaStatus = cudaDeviceReset();
+    if (cudaStatus != cudaSuccess)
+        throw std::runtime_error("cudaDeviceReset failed!");
 
     for (int i{}; i < general::keywords_length; ++i) {
         std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
     }
 
-    std::cout << "\n\nDuration: " << millis.count() << '\n';
-
-    //cudaError_t cudaStatus;
-
-    //// Process data in parallel.
-    //kernel_calls::processDataWithCuda(
-    //    data
-    //    , small_data_length
-    //    , keywords
-    //    , keywords_length
-    //    , word_size
-    //    , histogram);
-    //
-    //// cudaDeviceReset must be called before exiting in order for profiling and
-    //// tracing tools such as Nsight and Visual Profiler to show complete traces.
-    //cudaStatus = cudaDeviceReset();
-    //if (cudaStatus != cudaSuccess)
-    //    throw std::runtime_error("cudaDeviceReset failed!");
+    //std::cout << "\n\nDuration: " << millis.count() << '\n';
 
     return 0;
 }

@@ -2,6 +2,9 @@
 
 namespace kernel_calls
 {
+    constexpr size_t block_size{ 1024 };
+    constexpr size_t grid_size{ 1024 };
+
     // Helper function for using CUDA to add vectors in parallel.
     void processDataWithCuda(
         const char* data
@@ -47,7 +50,7 @@ namespace kernel_calls
                 throw std::runtime_error("cudaMemcpy failed!");
 
             // Launch a kernel on the GPU with one thread for each element.
-            kernels::countWords << <1, 1 >> > (dev_data, data_length, dev_keywords, dev_histogram);
+            kernels::countWords << <grid_size, block_size>> > (dev_data, data_length, dev_keywords, dev_histogram);
 
             // Check for any errors launching the kernel
             cudaStatus = cudaGetLastError();
@@ -58,12 +61,16 @@ namespace kernel_calls
             // any errors encountered during the launch.
             cudaStatus = cudaDeviceSynchronize();
             if (cudaStatus != cudaSuccess)
-                throw std::runtime_error("cudaDeviceSynchronize returned error code " + std::to_string(cudaStatus) + "after launching addKernel!");
+                throw std::runtime_error("cudaDeviceSynchronize returned error code " + std::to_string(cudaStatus) + "after launching addKernel!" + cudaGetErrorString(cudaStatus));
 
             // Copy output vector from GPU buffer to host memory.
             cudaStatus = cudaMemcpy(histogram, dev_histogram, general::keywords_length * sizeof(int), cudaMemcpyDeviceToHost);
             if (cudaStatus != cudaSuccess)
                 throw std::runtime_error("cudaMemcpy failed!");
+            
+            cudaFree(dev_data);
+            cudaFree(dev_keywords);
+            cudaFree(dev_histogram);
         }
         catch (std::runtime_error& e) {
             cudaFree(dev_data);

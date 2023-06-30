@@ -9,46 +9,52 @@ namespace kernels
 		, int* histogram)
     {
 		__shared__ char kws[general::keywords_length * general::word_size];
-		__shared__ int lcl_hist[general::keywords_length]{};
+		__shared__ int lcl_hist[general::keywords_length];
 		
 		int tx{ threadIdx.x };
 		int bx{ blockIdx.x };
 		int bdim{ blockDim.x };
-		int gdim{ gridDim.x };
-		
+		int gdim{ gridDim.x * blockDim.x };
+
 		// Copy keywords to shared memory
-		int i{ tx };
+		size_t i{ tx };
 		for (; i < general::keywords_length * general::word_size; i += bdim)
 			kws[i] = keywords[i];
+
+
+		// Initialise local histogram
+		for (i = tx; i < general::keywords_length; i += bdim)
+			lcl_hist[i] = 0;
 
 		__syncthreads();
 
 		// Process data
 		for (i = bx * bdim + tx; i < data_length; i += gdim) {
+
 			// Word index
-			static int wdidx;
+			size_t wdidx;
 			wdidx = i * general::word_size;
 
 			// Search the keywords to find the index and update local histogram
-			static int j;
+			size_t j;
 			for (j = 0; j < general::keywords_length; ++j) {
 				// Keyword index
-				static int kwidx;
-				static bool equal;
+				size_t kwidx;
+				bool equal;
 				kwidx = j * general::word_size;
 				equal = true;
-				static int k;
-				for (k = 0; k < general::word_size; ++k, ++kwidx, ++wdidx) {
-					if (kws[kwidx] == '\0' && data[wdidx] == '\0')
+				size_t k;
+				for (k = 0; k < general::word_size; ++k) {
+					if (kws[kwidx + k] == '\0' && data[wdidx + k] == '\0')
 						break;
-					if (kws[kwidx] != data[wdidx]) {
+					if (kws[kwidx + k] != data[wdidx + k]) {
 						equal = false;
 						break;
 					}
 				}
 				if (equal) {
 					atomicAdd(&lcl_hist[j], 1);
-					break; // Finish searching the keywords
+					break; // Stop searching the keywords
 				}
 			}
 		}
@@ -59,6 +65,5 @@ namespace kernels
 		i = tx;
 		for (; i < general::keywords_length; i += bdim)
 			atomicAdd(&histogram[i], lcl_hist[i]);
-
     }
 }
