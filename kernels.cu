@@ -11,7 +11,9 @@ namespace kernels
 		int bdim{ blockDim.x };
 		int gdim{ gridDim.x * blockDim.x };
 
-		for (int i{ bx * bdim + tx }; i < data_length; i += gdim) {
+		const size_t data_size{ data_length * general::word_size };
+
+		for (int i{ bx * bdim + tx }; i < data_size; i += gdim) {
 			char c{ data[i] };
 			if (c < 'Z' and c > 'A')
 				data[i] += 'a' - 'A';
