@@ -41,19 +41,27 @@ int main()
     // Histogram
     int* histogram{ new int[general::keywords_length]() };
 
-    // Run on CPU
+    //// Run on CPU
     //auto millis{ general::processData(data, data_length, keywords, histogram) };
+    //std::cout << "Duration(ms): " << millis.count() << '\n';
 
     // Run on GPU
     cudaError_t cudaStatus;
 
     // Process data in parallel.
     try {
+        float compute_time{};
+        float total_time{};
+
         kernel_calls::processDataWithCuda(
             data
             , data_length
             , keywords
-            , histogram);
+            , histogram
+            , &compute_time
+            , &total_time);
+
+        std::cout << "Duration(ms):\nCompute Time: " << compute_time << "\nTotal Time: " << total_time << '\n';
     }
     catch (std::runtime_error& e) {
         std::cout << e.what() << '\n';
@@ -65,11 +73,11 @@ int main()
     if (cudaStatus != cudaSuccess)
         throw std::runtime_error("cudaDeviceReset failed!");
 
-    for (int i{}; i < general::keywords_length; ++i) {
-        std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
-    }
+    //// Print the histogram
+    //for (int i{}; i < general::keywords_length; ++i) {
+    //    std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
+    //}
 
-    //std::cout << "\n\nDuration: " << millis.count() << '\n';
 
     return 0;
 }
