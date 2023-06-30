@@ -12,10 +12,10 @@ namespace general
 		std::string input_word;
 		std::ifstream word_file(file_path);
 		if (word_file.is_open()) {
-			for (int i{}; i < offset; ++i)
+			for (size_t i{}; i < offset; ++i)
 				word_file >> input_word;
 
-			for (int i{}; i < num && word_file; ++i) {
+			for (size_t i{}; i < num && word_file; ++i) {
 				word_file >> input_word;
 				if (input_word.length() < word_size)
 					strcpy(&word_array[i * word_size], input_word.c_str());
@@ -26,22 +26,27 @@ namespace general
 	std::chrono::milliseconds preprocessData(
 		char* data, const size_t data_length)
 	{
-		std::regex word_regex("(\\w+)");
-		std::smatch match;
-
 		auto start{ std::chrono::system_clock::now() };
 
-		for (int i{ 0 }; i < data_length; ++i) {
-			static std::string str;
-			str = &data[i * word_size];
-			std::regex_search(str, match, word_regex);
-
-			str = match[0].str();
-
-			std::transform(str.begin(), str.end(), str.begin()
-				, [](unsigned char c) { return std::tolower(c); });
-
-			strcpy(&data[i * word_size], str.c_str());
+		for (size_t i{ 0 }; i < data_length; ++i) {
+			static size_t wdidx;
+			wdidx = i * word_size;
+			static size_t j;
+			static char c;
+			for (j = 0; j < word_size; ++j) {
+				c = data[wdidx + j];
+				c = tolower(c);
+				if (c <= 'z' && c >= 'a') {
+					while (c <= 'z' && c >= 'a') {
+						data[wdidx] = c;
+						++wdidx;
+						c = data[wdidx + j];
+						c = tolower(c);
+					}
+					data[wdidx] = '\0';
+					break;
+				}
+			}
 		}
 
 		auto end{ std::chrono::system_clock::now() };
