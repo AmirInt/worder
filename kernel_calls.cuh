@@ -31,7 +31,6 @@ namespace kernel_calls
 		, int* histogram
 		, float* compute_time
 		, float* total_time);
-
 }
 
 #endif // WORDER_KERNEL_CALLS_CUH_

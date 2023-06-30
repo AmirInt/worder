@@ -6,18 +6,19 @@ namespace kernels
 		char* data
 		, const size_t data_length)
 	{
-		int tx{ threadIdx.x };
-		int bx{ blockIdx.x };
-		int bdim{ blockDim.x };
-		int gdim{ gridDim.x * blockDim.x };
+		size_t tx{ threadIdx.x };
+		size_t bx{ blockIdx.x };
+		size_t bdim{ blockDim.x };
+		size_t gdim{ gridDim.x * blockDim.x };
 
 		const size_t data_size{ data_length * general::word_size };
 
 		char c;
+		const char addition{ 'a' - 'A' };
 		for (size_t i{ bx * bdim + tx }; i < data_size; i += gdim) {
 			c = data[i];
-			if (c < 'Z' and c > 'A')
-				data[i] += 'a' - 'A';
+			if (c <= 'Z' && c >= 'A')
+				data[i] += addition;
 		}
 	}
 
@@ -37,14 +38,10 @@ namespace kernels
 			// Word index
 			wdidx = i * general::word_size;
 
-			c = data[wdidx];
-			if (c < 'z' and c > 'a')
-				continue;
-
-			for (j = 1; j < general::word_size; ++j) {
+			for (j = 0; j < general::word_size; ++j) {
 				c = data[wdidx + j];
-				if (c < 'z' and c > 'a') {
-					while (c < 'z' and c > 'a') {
+				if (c <= 'z' && c >= 'a') {
+					while (c <= 'z' && c >= 'a') {
 						data[wdidx] = c;
 						++wdidx;
 						c = data[wdidx + j];
@@ -99,7 +96,7 @@ namespace kernels
 				kwidx = j * general::word_size;
 				equal = true;
 				for (k = 0; k < general::word_size; ++k) {
-					if (kws[kwidx + k] == '\0' and data[wdidx + k] == '\0')
+					if (kws[kwidx + k] == '\0' && data[wdidx + k] == '\0')
 						break;
 					if (kws[kwidx + k] != data[wdidx + k]) {
 						equal = false;

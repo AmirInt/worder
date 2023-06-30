@@ -291,5 +291,4 @@ namespace kernel_calls
             throw std::runtime_error(e);
         }
     }
-
 }
