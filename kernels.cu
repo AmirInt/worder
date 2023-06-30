@@ -2,6 +2,29 @@
 
 namespace kernels
 {
+	__global__ void lowerData(
+		char* data
+		, const size_t data_length)
+	{
+		int tx{ threadIdx.x };
+		int bx{ blockIdx.x };
+		int bdim{ blockDim.x };
+		int gdim{ gridDim.x * blockDim.x };
+
+		for (int i{ bx * bdim + tx }; i < data_length; i += gdim) {
+			char c{ data[i] };
+			if (c < 'Z' and c > 'A')
+				data[i] += 'a' - 'A';
+		}
+	}
+
+	__global__ void removeExcessives(
+		char* data
+		, const size_t data_length)
+	{
+
+	}
+
     __global__ void countWords(
 		const char* data
 		, const size_t data_length
@@ -45,7 +68,7 @@ namespace kernels
 				equal = true;
 				size_t k;
 				for (k = 0; k < general::word_size; ++k) {
-					if (kws[kwidx + k] == '\0' && data[wdidx + k] == '\0')
+					if (kws[kwidx + k] == '\0' and data[wdidx + k] == '\0')
 						break;
 					if (kws[kwidx + k] != data[wdidx + k]) {
 						equal = false;

@@ -14,6 +14,14 @@
 
 namespace kernels
 {
+	__global__ void lowerData(
+		char* data
+		, const size_t data_length);
+
+	__global__ void removeExcessives(
+		char* data
+		, const size_t data_length);
+
     __global__ void countWords(
 		const char* data
 		, const size_t data_length
