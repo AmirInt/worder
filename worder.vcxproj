@@ -89,6 +89,7 @@
     <Text Include="data\large.txt" />
     <Text Include="data\medium.txt" />
     <Text Include="data\small.txt" />
+    <Text Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="general.hpp" />
