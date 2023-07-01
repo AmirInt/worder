@@ -41,11 +41,11 @@ int main()
     // Histogram
     int* histogram{ new int[general::keywords_length]() };
 
-    //// Run on CPU
-    //auto premillis{ general::preprocessData(data, data_length) };
+    // Run on CPU
+    auto premillis{ general::preprocessData(data, data_length) };
 
-    //auto millis{ general::processData(data, data_length, keywords, histogram) };
-    //std::cout << "Duration(ms):\nPreprocess: " << premillis.count() << "\nProcess: " << millis.count() << '\n';
+    auto millis{ general::processData(data, data_length, keywords, histogram) };
+    std::cout << "CPU Duration(ms):\nPreprocess: " << premillis.count() << "\nProcess: " << millis.count() << "\n\n";
 
     // Run on GPU
     cudaError_t cudaStatus;
@@ -55,7 +55,7 @@ int main()
         float compute_time{};
         float total_time{};
 
-        kernel_calls::processDataWithCudaPreprocess(
+        kernel_calls::processDataWithCudaStreamsPreprocess(
             data
             , data_length
             , keywords
@@ -63,7 +63,7 @@ int main()
             , &compute_time
             , &total_time);
 
-        std::cout << "Duration(ms):\nCompute Time: " << compute_time << "\nTotal Time: " << total_time << '\n';
+        std::cout << "GPU Duration(ms):\nCompute Time: " << compute_time << "\nTotal Time: " << total_time << '\n';
     }
     catch (std::runtime_error& e) {
         std::cout << e.what() << '\n';

@@ -15,6 +15,8 @@
 
 namespace kernel_calls
 {
+	constexpr int n_streams{ 16 };
+
 	void processDataWithCuda(
 		const char* data
 		, const size_t data_length
@@ -25,6 +27,14 @@ namespace kernel_calls
 
 
 	void processDataWithCudaPreprocess(
+		const char* data
+		, const size_t data_length
+		, const char* keywords
+		, int* histogram
+		, float* compute_time
+		, float* total_time);
+
+	void processDataWithCudaStreamsPreprocess(
 		const char* data
 		, const size_t data_length
 		, const char* keywords
