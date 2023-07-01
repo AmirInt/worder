@@ -54,7 +54,7 @@ As result data indicates, we achieved an average speedup of nearly 10 yet again.
 
 - ### Streams
 
-This version of implementation, makes use of CUDA streams to pipeline data transfer and processing. By breaking the input data (data decomposition), each data section independently of others, gets preprocessed and processed GPU.
+This version of implementation, makes use of CUDA streams to pipeline data transfer and processing. By breaking the input data (data decomposition), each data section independently of others, gets preprocessed and processed by GPU.
 
 | Data   | GPU Time (ms) |
 |:------:|:-------------:|
@@ -63,7 +63,7 @@ This version of implementation, makes use of CUDA streams to pipeline data trans
 | Large | 127.618 |
 | Huge | 236.412 |
 
-This time, to our surprise, we achieved a lower speedup compared to execution times in CPU, an average of nearly 8. The reason behind this slow-down is the occupancy of the kernels. The written kernel achieves an occupancy of about 98%. Thus, the different streams, although called in parallel, run in serial. With the overhead of many streams and kernel creations and launches, the computation times just deteriorate.
+This time, to our surprise, we achieved a lower speedup compared to the previous steps, an average of nearly 8. The reason behind this slow-down is the occupancy of the kernels. The written kernel achieves an occupancy of about 98%. Thus, the different streams, although called in parallel, run in serial. With the overhead of many streams and kernel creations and launches, the computation times just deteriorate.
 
 ![Image illustrating the compute throughput of GPU](./assets/23.png)
 
@@ -73,7 +73,7 @@ The main optimisation steps include:
 1. **Use of shared memory for the keywords array**; using shared memory considerably 
 speeds up search among the keywords to find the right histogram index to update. 
 When each block maintains its own keywords inside shared memory, the access 
-time to keywords reduces by several orders of magnitudes compared to when 
+time to keywords reduces by several orders of magnitude compared to when 
 reading keywords from the global memory.
 2. **Coalescing accesses to the global memory**; as much as possible, the application is 
 written in a way that threads access consecutive memory addresses. This way 
