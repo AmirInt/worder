@@ -55,7 +55,7 @@ int main()
         float compute_time{};
         float total_time{};
 
-        kernel_calls::processDataWithCudaStreamsPreprocess(
+        kernel_calls::processDataWithCudaPreprocess(
             data
             , data_length
             , keywords
@@ -75,10 +75,10 @@ int main()
     if (cudaStatus != cudaSuccess)
         throw std::runtime_error("cudaDeviceReset failed!");
 
-    //// Print the histogram
-    //for (int i{}; i < general::keywords_length; ++i) {
-    //    std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
-    //}
+    // Print the histogram
+    for (int i{}; i < general::keywords_length; ++i) {
+        std::cout << &keywords[i * general::word_size] << ": " << histogram[i] << '\n';
+    }
 
 
     return 0;
