@@ -9,6 +9,9 @@
     <Filter Include="data">
       <UniqueIdentifier>{20b752f8-3a8b-45bd-a129-9b5e0dd12b6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="report">
+      <UniqueIdentifier>{da8fb407-cba0-4972-911e-dff3872685d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\google-10000-english-no-swears.txt">
@@ -34,5 +37,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="general.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="report\report_plain.ncu-rep">
+      <Filter>report</Filter>
+    </None>
+    <None Include="report\report_preprocess.ncu-rep">
+      <Filter>report</Filter>
+    </None>
+    <None Include="report\report_streams_preprocess.ncu-rep">
+      <Filter>report</Filter>
+    </None>
   </ItemGroup>
 </Project>

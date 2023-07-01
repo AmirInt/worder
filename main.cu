@@ -41,11 +41,11 @@ int main()
     // Histogram
     int* histogram{ new int[general::keywords_length]() };
 
-    // Run on CPU
-    auto premillis{ general::preprocessData(data, data_length) };
+    //// Run on CPU
+    //auto premillis{ general::preprocessData(data, data_length) };
 
-    auto millis{ general::processData(data, data_length, keywords, histogram) };
-    std::cout << "CPU Duration(ms):\nPreprocess: " << premillis.count() << "\nProcess: " << millis.count() << "\n\n";
+    //auto millis{ general::processData(data, data_length, keywords, histogram) };
+    //std::cout << "CPU Duration(ms):\nPreprocess: " << premillis.count() << "\nProcess: " << millis.count() << "\n\n";
 
     // Run on GPU
     cudaError_t cudaStatus;
