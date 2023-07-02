@@ -6,8 +6,7 @@ namespace general
 		const std::string& file_path
 		, char* word_array
 		, size_t num
-		, size_t offset
-		, size_t word_size)
+		, size_t offset)
 	{
 		std::string input_word;
 		std::ifstream word_file(file_path);

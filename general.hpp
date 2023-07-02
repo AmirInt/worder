@@ -7,39 +7,20 @@
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
-#include <regex>
 
-//There is 1 device supporting CUDA
-//
-//Device 0: "NVIDIA GeForce GTX 1650"
-//Major revision number : 7
-//Minor revision number : 5
-//Total amount of global memory : 4294639616 bytes
-//Number of multiprocessors : 14
-//Number of cores : 112
-//Total amount of constant memory : 65536 bytes
-//Total amount of shared memory per block : 49152 bytes
-//Total amount of shared memory per SM : 65536 bytes
-//Total number of registers available per block : 65536
-//Warp size : 32
-//Maximum number of threads per block : 1024
-//Maximum sizes of each dimension of a block : 1024 x 1024 x 64
-//Maximum sizes of each dimension of a grid : 2147483647 x 65535 x 65535
-//Maximum memory pitch : 2147483647 bytes
-//Texture alignment : 512 bytes
-//Clock rate : 1.51 GHz
-//Concurrent copy and execution : Yes
-//
-//TEST PASSED
 
 namespace general
 {
+	// Basic application configurations
+	// Word size
 	constexpr size_t word_size{ 32 };
 
+	// Keywords
 	constexpr size_t no_offset{ 0 };
 	constexpr size_t keyword_offset{ 512 };
 	constexpr size_t keywords_length{ 512 };
 
+	// Datasets
 	constexpr size_t small_data_length{ 131'072 }; // words
 	const std::string small_data_file{ "./data/small.txt" };
 
@@ -52,18 +33,40 @@ namespace general
 	constexpr size_t huge_data_length{ 1'572'864 }; // words
 	const std::string huge_data_file{ "./data/huge.txt" };
 
-	
+
+	/// <summary>
+	/// Opens the file in the given, reads words and puts them into the given
+	/// memory address as tokens
+	/// </summary>
+	/// <param name="file_path">The address of the file</param>
+	/// <param name="word_array">The memory address to store word tokens in</param>
+	/// <param name="num">The number of words to read</param>
+	/// <param name="offset">The number of initial words to skip while readin
+	/// the dataset</param>
 	void readWordFile(
 		const std::string& file_path
 		, char* word_array
 		, size_t num
-		, size_t offset
-		, size_t word_size);
+		, size_t offset);
 
 
+	/// <summary>
+	/// Preprocesses the given data to lowercase words and remove punctuation marks
+	/// </summary>
+	/// <param name="data">The target data</param>
+	/// <param name="data_length">The length of the data in words</param>
+	/// <returns>The time of preprocessing</returns>
 	std::chrono::milliseconds preprocessData(char* data, const size_t data_length);
 
 
+	/// <summary>
+	/// Processes data to produce the histogram of the given keywords
+	/// </summary>
+	/// <param name="data">The target data</param>
+	/// <param name="data_length">The length of the data in words</param>
+	/// <param name="keywords">The list of keywords</param>
+	/// <param name="histogram">The histogram array to update</param>
+	/// <returns>The time of processing</returns>
 	std::chrono::milliseconds processData(
 		const char* data
 		, const size_t data_length
