@@ -104,6 +104,10 @@
     <None Include="report\report_preprocess.ncu-rep" />
     <None Include="report\report_streams_preprocess.ncu-rep" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\01.png" />
+    <Image Include="assets\23.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.1.targets" />

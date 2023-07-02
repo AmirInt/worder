@@ -12,6 +12,9 @@
     <Filter Include="report">
       <UniqueIdentifier>{da8fb407-cba0-4972-911e-dff3872685d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{004d64eb-fd79-4e64-906a-16879590b0ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\google-10000-english-no-swears.txt">
@@ -49,5 +52,13 @@
     <None Include="report\report_streams_preprocess.ncu-rep">
       <Filter>report</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\01.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\23.png">
+      <Filter>assets</Filter>
+    </Image>
   </ItemGroup>
 </Project>

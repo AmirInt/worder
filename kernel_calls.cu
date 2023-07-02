@@ -2,10 +2,6 @@
 
 namespace kernel_calls
 {
-    constexpr size_t block_size{ 1024 };
-    constexpr size_t grid_size{ 1024 };
-
-    // Helper function for using CUDA to add vectors in parallel.
     void processDataWithCuda(
         const char* data
         , const size_t data_length
